@@ -1,0 +1,12 @@
+# curl -v -XPOST -u client:secret "http://localhost:8080/oauth/token?grant_type=password&username=john&password=12345&scope=read"
+POST http://localhost:8080/oauth/token?grant_type=password&username=john&password=12345&scope=read
+Authorization: Basic client secret
+
+###
+
+# curl -u client:secret -XPOST http://localhost:8080/oauth/token?grant_type=authorization_code&username=user&password=12345&scope=read
+POST http://localhost:8080/oauth/token?grant_type=authorization_code&username=user&password=12345&scope=read
+Authorization: Basic client secret
+
+###
+

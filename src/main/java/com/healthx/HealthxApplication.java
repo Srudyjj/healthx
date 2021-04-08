@@ -1,4 +1,4 @@
-package com.healthx.healthx;
+package com.healthx;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

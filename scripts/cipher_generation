@@ -1,0 +1,3 @@
+cd ..\src\main\resources && keytool -genkeypair -alias ssia -keyalg RSA  -keypass ssia123 -keystore ssia.jks -storepass ssia123
+
+keytool -list -rfc --keystore ssia.jks | openssl x509 -inform pem -pubkey
