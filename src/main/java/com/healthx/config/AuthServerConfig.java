@@ -2,6 +2,7 @@ package com.healthx.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -19,19 +20,24 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     private final JwtAccessTokenConverter converter;
 
+    private final UserDetailsService userDetailsService;
+
     public AuthServerConfig(AuthenticationManager authenticationManager,
-                                            TokenStore tokenStore,
-                                            JwtAccessTokenConverter converter) {
+                            TokenStore tokenStore,
+                            JwtAccessTokenConverter converter,
+                            UserDetailsService userDetailsService) {
         this.authenticationManager = authenticationManager;
         this.tokenStore = tokenStore;
         this.converter = converter;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints.authenticationManager(authenticationManager)
                 .tokenStore(tokenStore)
-                .accessTokenConverter(converter);
+                .accessTokenConverter(converter)
+                .userDetailsService(userDetailsService);
     }
 
     @Override
@@ -40,6 +46,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
                 .withClient("client")
                 .secret("secret")
                 .authorizedGrantTypes("authorization_code", "password", "refresh_token")
-                .scopes("read");
+                .scopes("read")
+                .redirectUris("http://localhost:8080/home");
     }
 }
