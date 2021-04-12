@@ -33,7 +33,62 @@ public class GenerateTokenTests {
         )
                 .andExpect(jsonPath("$.access_token").exists())
                 .andExpect(status().isOk());
-
     }
 
+    @Test
+    void generateTokenInvalidClientTest() throws Exception {
+        mvc.perform(
+                post("/oauth/token")
+                        .with(httpBasic("wrong_client", "secret"))
+                        .queryParam("grant_type", "password")
+                        .queryParam("username", "john")
+                        .queryParam("password", "12345")
+                        .queryParam("scope", "read")
+        )
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.access_token").doesNotExist());
+    }
+
+    @Test
+    void generateTokenInvalidUserTest() throws Exception {
+        mvc.perform(
+                post("/oauth/token")
+                        .with(httpBasic("client", "secret"))
+                        .queryParam("grant_type", "password")
+                        .queryParam("username", "wrong")
+                        .queryParam("password", "12345")
+                        .queryParam("scope", "read")
+        )
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.access_token").doesNotExist());
+    }
+
+    @Test
+    void generateTokenPasswordNotValidTest() throws Exception {
+        mvc.perform(
+                post("/oauth/token")
+                        .with(httpBasic("client", "other_secret"))
+                        .queryParam("grant_type", "password")
+                        .queryParam("username", "john")
+                        .queryParam("password", "wrong_password")
+                        .queryParam("scope", "read")
+        )
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.access_token").doesNotExist());
+    }
+
+    @Test
+    void generateRefreshTokenTest() throws Exception {
+        mvc.perform(
+                post("/oauth/token")
+                        .with(httpBasic("client", "secret"))
+                        .queryParam("grant_type", "password")
+                        .queryParam("username", "john")
+                        .queryParam("password", "12345")
+                        .queryParam("scope", "read")
+        )
+                .andExpect(jsonPath("$.access_token").exists())
+                .andExpect(jsonPath("$.refresh_token").exists())
+                .andExpect(status().isOk());
+    }
 }
