@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `client` (
     `client_id` VARCHAR(45) NOT NULL,
     `secret` TEXT NOT NULL,
     `scope` VARCHAR(45) NOT NULL,
-    `rediect_uri` TEXT NOT NULL,
+    `redirect_uri` TEXT NOT NULL,
     PRIMARY KEY (`id`));
 
 CREATE TABLE IF NOT EXISTS `client_grant_types` (
