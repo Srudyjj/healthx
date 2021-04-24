@@ -15,7 +15,7 @@ public class Authority {
     private String name;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", foreignKey=@ForeignKey(name = "FK_authority_user"))
     private User user;
 
     public long getId() {
