@@ -10,3 +10,11 @@ Authorization: Basic client secret
 
 ###
 
+POST  http://localhost:8080/client
+Authorization: Basic client secret
+Content-Type: application/json
+
+{
+
+}
+

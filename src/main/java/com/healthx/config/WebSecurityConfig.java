@@ -41,5 +41,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin();
+
+        http.csrf(c -> c.ignoringAntMatchers(
+                "/user/**", "/client/**"
+        ));
+
+        http.authorizeRequests()
+                .mvcMatchers("/user/**").permitAll()
+                .mvcMatchers("/client/**").permitAll();
+        super.configure(http);
     }
 }
