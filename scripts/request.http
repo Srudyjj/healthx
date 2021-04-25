@@ -10,11 +10,28 @@ Authorization: Basic client secret
 
 ###
 
+GET  http://localhost:8080/client
+Authorization: Basic john 12345
+Content-Type: application/json
+
+###
+
 POST  http://localhost:8080/client
-Authorization: Basic client secret
+Authorization: Basic john 12345
 Content-Type: application/json
 
 {
-
+  "client_id": "client_id",
+  "secret": "secret",
+  "scope": "scope",
+  "redirectUri": "localhost",
+  "grantTypes": [
+    {
+      "grantType": "grantType"
+    }
+  ]
 }
+
+###
+
 

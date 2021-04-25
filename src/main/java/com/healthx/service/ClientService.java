@@ -20,7 +20,7 @@ public class ClientService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void addClient(Client client) {
+    public Client addClient(Client client) {
         Optional<Client> existedClient = repository.findById(client.getId());
         if (existedClient.isPresent()) {
             throw new ClientAlreadyExistsException("Client already exists.");
@@ -29,6 +29,7 @@ public class ClientService {
         client.setSecret(passwordEncoder.encode(client.getSecret()));
         client.getGrantTypes().forEach(gt -> gt.setClient(client));
         repository.save(client);
+        return client;
     }
 
     public List<Client> getAllClients() {

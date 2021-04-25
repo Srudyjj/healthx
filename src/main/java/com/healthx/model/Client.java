@@ -1,5 +1,7 @@
 package com.healthx.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @JsonProperty("client_id")
     @Column(name = "client_id", nullable = false)
     private String clientId;
 
@@ -25,7 +28,7 @@ public class Client {
     @Column(name = "redirect_uri", nullable = false)
     private String redirectUri;
 
-    @OneToMany(mappedBy ="client", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy ="client", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<ClientGrantType> grantTypes = new ArrayList<>();
 
     public long getId() {
@@ -74,6 +77,11 @@ public class Client {
 
     private void setGrantTypes(List<ClientGrantType> grantTypes) {
         this.grantTypes = grantTypes;
+    }
+
+    private void addGrantType(ClientGrantType grantType) {
+        grantType.setClient(this);
+        this.grantTypes.add(grantType);
     }
 
     @Override

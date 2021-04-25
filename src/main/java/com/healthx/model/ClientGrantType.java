@@ -1,5 +1,7 @@
 package com.healthx.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -14,7 +16,8 @@ public class ClientGrantType {
     @Column(name = "grant_type", nullable = false)
     private String grantType;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "client_id", foreignKey=@ForeignKey(name = "FK_grant_types_client"))
     private Client client;
 
