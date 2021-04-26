@@ -21,7 +21,7 @@ public class ClientService {
     }
 
     public Client addClient(Client client) {
-        Optional<Client> existedClient = repository.findById(client.getId());
+        Optional<Client> existedClient = repository.findByClientId(client.getClientId());
         if (existedClient.isPresent()) {
             throw new ClientAlreadyExistsException("Client already exists.");
         }

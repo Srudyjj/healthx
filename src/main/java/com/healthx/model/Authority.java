@@ -1,5 +1,7 @@
 package com.healthx.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -14,6 +16,7 @@ public class Authority {
     @Column(nullable = false)
     private String name;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", foreignKey=@ForeignKey(name = "FK_authority_user"))
     private User user;
