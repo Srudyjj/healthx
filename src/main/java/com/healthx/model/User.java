@@ -54,6 +54,11 @@ public class User {
         this.authorities = authorities;
     }
 
+    public void addAuthorities(Authority authority) {
+        authority.setUser(this);
+        this.authorities.add(authority);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

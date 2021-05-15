@@ -79,7 +79,7 @@ public class Client {
         this.grantTypes = grantTypes;
     }
 
-    private void addGrantType(ClientGrantType grantType) {
+    public void addGrantType(ClientGrantType grantType) {
         grantType.setClient(this);
         this.grantTypes.add(grantType);
     }
