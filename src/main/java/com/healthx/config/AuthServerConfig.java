@@ -1,5 +1,6 @@
 package com.healthx.config;
 
+import com.healthx.security.service.JpaClientDetailsService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,33 +21,27 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     private final JwtAccessTokenConverter converter;
 
-    private final UserDetailsService userDetailsService;
+    private final JpaClientDetailsService clientDetailsService;
 
     public AuthServerConfig(AuthenticationManager authenticationManager,
                             TokenStore tokenStore,
                             JwtAccessTokenConverter converter,
-                            UserDetailsService userDetailsService) {
+                            JpaClientDetailsService clientDetailsService) {
         this.authenticationManager = authenticationManager;
         this.tokenStore = tokenStore;
         this.converter = converter;
-        this.userDetailsService = userDetailsService;
+        this.clientDetailsService = clientDetailsService;
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints.authenticationManager(authenticationManager)
                 .tokenStore(tokenStore)
-                .accessTokenConverter(converter)
-                .userDetailsService(userDetailsService);
+                .accessTokenConverter(converter);
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
-                .withClient("client")
-                .secret("secret")
-                .authorizedGrantTypes("authorization_code", "password", "refresh_token")
-                .scopes("read")
-                .redirectUris("http://localhost:8080/home");
+        clients.withClientDetails(clientDetailsService);
     }
 }
