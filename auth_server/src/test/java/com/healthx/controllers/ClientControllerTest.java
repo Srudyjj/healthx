@@ -25,7 +25,6 @@ class ClientControllerTest {
     void addClient() throws Exception {
         mvc.perform(
                 post("/user")
-                    .with(httpBasic("john", "12345"))
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .content("{" +
@@ -43,7 +42,6 @@ class ClientControllerTest {
     void getAllClients() throws Exception {
         mvc.perform(
                 post("/user")
-                        .with(httpBasic("john", "12345"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content("{" +
