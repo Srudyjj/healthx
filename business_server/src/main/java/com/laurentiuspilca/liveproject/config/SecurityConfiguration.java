@@ -1,10 +1,13 @@
 package com.laurentiuspilca.liveproject.config;
 
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,6 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Value("${publicKey}")
@@ -36,6 +40,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 }
             )
         );
+
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.DELETE, "/profile/**").hasAuthority("admin")
+                .antMatchers(HttpMethod.DELETE, "/metric/**").hasAuthority("admin")
+                .mvcMatchers(HttpMethod.POST, "/advice/**").hasAuthority("advice")
+                .anyRequest().authenticated();
     }
 
     @Bean

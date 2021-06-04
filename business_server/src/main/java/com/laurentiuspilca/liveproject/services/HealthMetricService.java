@@ -5,6 +5,7 @@ import com.laurentiuspilca.liveproject.entities.HealthProfile;
 import com.laurentiuspilca.liveproject.exceptions.NonExistentHealthProfileException;
 import com.laurentiuspilca.liveproject.repositories.HealthMetricRepository;
 import com.laurentiuspilca.liveproject.repositories.HealthProfileRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,11 +24,11 @@ public class HealthMetricService {
     this.healthProfileRepository = healthProfileRepository;
   }
 
+  @PreAuthorize("#healthMetric.profile.username == authentication.principal.claims['user_name']")
   public void addHealthMetric(HealthMetric healthMetric) {
     Optional<HealthProfile> profile = healthProfileRepository.findHealthProfileByUsername(healthMetric.getProfile().getUsername());
 
-    profile.ifPresentOrElse(
-            p ->
+    profile.ifPresentOrElse(p ->
             {
               healthMetric.setProfile(p);
               healthMetricRepository.save(healthMetric);
@@ -39,10 +40,12 @@ public class HealthMetricService {
     ;
   }
 
+  @PreAuthorize("isAuthenticated()")
   public List<HealthMetric> findHealthMetricHistory(String username) {
     return healthMetricRepository.findHealthMetricHistory(username);
   }
 
+  @PreAuthorize("hasAuthority('admin')")
   public void deleteHealthMetricForUser(String username) {
     Optional<HealthProfile> profile = healthProfileRepository.findHealthProfileByUsername(username);
 
